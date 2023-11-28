@@ -36,7 +36,7 @@ export const Podcast = () => {
 								</div>
 							</div>
 							<div className="card-footer">
-								<a className="escuchar" href={podcast.Urllisten}>
+								<a className="escuchar" href={podcast.URLListen}>
 									Escuchar
 								</a>
 							</div>
