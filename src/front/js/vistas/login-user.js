@@ -28,7 +28,7 @@ export const Login_user = () => {
       setSubmit(true);
       setTimeout(() => {
         setSubmit(false);
-        navigate("/perfil_user");
+        navigate("/user-information");
       }, 500);
     } else {
       setError("Usuario o contraseña incorrectos. Por favor, inténtalo de nuevo.");
@@ -37,7 +37,16 @@ export const Login_user = () => {
 
     setUser('');
   };
-
+  const handleEmailChange = (e) => {
+    setError(""); // Limpiar el error cuando se cambia el correo electrónico
+    setUser({ ...user, email: e.target.value });
+    
+  };
+  
+  const handlePasswordChange = (e) => {
+    setError(""); // Limpiar el error cuando se cambia la contraseña
+    setUser({ ...user, password: e.target.value });
+  };
   return (
     <>
       <div className="contenedor">
@@ -56,7 +65,7 @@ export const Login_user = () => {
                       placeholder="Correo Electrónico"
                       aria-describedby="emailHelp"
                       value={user.email}
-                      onChange={(e) => setUser({ ...user, email: e.target.value })}
+                      onChange={handleEmailChange}
                     />
                   </div>
                   <div className="detalle-input">
@@ -68,7 +77,7 @@ export const Login_user = () => {
                       placeholder="Contraseña"
                       aria-describedby="emailHelp"
                       value={user.password}
-                      onChange={(e) => setUser({ ...user, password: e.target.value })}
+                      onChange={handlePasswordChange} 
                     />
                   </div>
                 </div>

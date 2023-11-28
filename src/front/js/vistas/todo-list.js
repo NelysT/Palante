@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import readingsinicio from "../../img/readingsinicio.jpg";
 import "../../styles/todo_list.css";
+import { Actions } from "@cloudinary/url-gen";
 
 export const TodoList = () => {
   const [tasks, setTasks] = useState([]);
@@ -10,8 +11,7 @@ export const TodoList = () => {
   console.log("TASKS", tasks);
   console.log("INPUT", input);
 
-  // Traer las tareas
-  useEffect(() => {
+  const get_task = () => {
     const token = sessionStorage.getItem('token');
 
     fetch(process.env.BACKEND_URL + '/tasks', {
@@ -26,6 +26,11 @@ export const TodoList = () => {
         setTasks(data);
       })
       .catch(err => console.log("err", err))
+  }
+  // Traer las tareas
+  useEffect(() => {
+    get_task()
+    
   }, []);
 
   const handleClick = (e) => {
@@ -49,6 +54,8 @@ export const TodoList = () => {
           setInput(""); // Limpiar el input después de modificar la tarea
           setSelectedTask(null); // Desmarcar la tarea seleccionada
         })
+        
+        
         .catch(err => console.log("err", err))
     } else {
       // Agregar nueva tarea
@@ -70,6 +77,7 @@ export const TodoList = () => {
         .then(data => {
           console.log("TAREA CREADA", data);
           setTasks(prevTasks => [...prevTasks, data]);
+          get_task();
           setInput(""); // Limpiar el input después de agregar la tarea
         })
         .catch(err => console.log("err", err))
@@ -156,9 +164,7 @@ export const TodoList = () => {
           </li>
         ))}
       </ul>
-      <div className="numero-tareas">
-          <div>{tasks.length} tareas.</div>
-        </div>
+      
       </div>
       <div class="col-sm-12 col-md-4 list-tres">
             <h2 className="subtitulofoto"><span>Sonreir</span></h2>
