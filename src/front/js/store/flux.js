@@ -283,7 +283,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           body: JSON.stringify({ "day": selectedDay, "time": selectedTime, "full_date": process_date }), // Envía el ID del artículo que se agregará a favoritos
         })
         if (resp.ok) {
-          getActions().send_mail()
+          getActions().send_mail(selectedDay, selectedTime)
           alert('Tu cita ha sido reservada y se te ha enviado un correo')
 
         } else {
@@ -338,14 +338,16 @@ const getState = ({ getStore, getActions, setStore }) => {
       },
 
 
-      send_mail: () => {
+      send_mail: (selectedDay, selectedTime) => {
         const token = sessionStorage.getItem('token');
         fetch(process.env.BACKEND_URL + '/api/send_mail', {
-          method: 'GET',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token
-          }
+          },
+          body: JSON.stringify({ "day": selectedDay, "time": selectedTime }), 
+        
         })
           .then(response => {
             if (!response.ok) {

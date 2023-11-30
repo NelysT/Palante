@@ -857,6 +857,7 @@ def delete_appointment(appointment_id):
     db.session.commit()
     return jsonify({'msg':'ok'}), 200
 
+### Para enviar un email general
 @app.route('/api/send_mail', methods=['GET'])
 @jwt_required()
 def send_mail():
@@ -866,7 +867,29 @@ def send_mail():
     mail.send(msg)
     return jsonify({'msg':'mensaje enviado'}), 200
 
+### para enviar el email para las citas
+@app.route('/api/send_mail', methods=['POST'])
+@jwt_required()
+def send_mail_con_body():
+    body = request.get_json(silent=True)
+    print(body)
+    if body is None:
+        return jsonify({'msg': 'Send information in the body'}), 400
+    
+    user_email = get_jwt_identity()
+    print(user_email)
+    user = User.query.filter_by(email = user_email).first()
+    print(user)
+    user_name = user.full_name
+    day = body['day'].split('T')[0].strip()
+    
+    time = body['time'].split('T')[1][0:5].strip()
 
+       
+    msg = Message(subject='Confirmacion de cita', sender = 'palante4geeksAcademic@gmail.com', recipients=[user_email])
+    msg.html = f"<h1> Hola {user_name}, confirmamos que tiene una cita reservada con nuestros freelancers de PA'LANTE el {day} a las {time} </h1>"
+    mail.send(msg)
+    return jsonify({'msg':'mensaje enviado'}), 200
 
 #### EVENTOS MODIFICADOS NELYS####
 ### endpoint para unirse al evento ###
